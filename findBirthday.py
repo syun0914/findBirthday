@@ -4,9 +4,7 @@ from base64 import b64decode, b64encode
 from Cryptodome.Cipher.PKCS1_v1_5 import new
 from Cryptodome.PublicKey.RSA import importKey
 from dateutil.relativedelta import relativedelta as redelta
-import ssl
 
-ssl._create_default_https_context = ssl._create_unverified_context
 BASEURL = 'hcs.eduro.go.kr/'
 
 
@@ -30,7 +28,7 @@ def OrgCode(sName: str, level: int=3):
 
 
 def findUser(birth, eName, orgCode):
-    jData: dict = {
+    jData = {
         "orgCode": orgCode,
         "name": eName,
         "birthday": encrypt(birth),
@@ -48,12 +46,9 @@ def find(
     orgCode = OrgCode(sName, int(level))
     eName = encrypt(name)
 
-    if yy and int(yy):
-        date = date.replace(year=int(yy))
-    if mm and int(mm):
-        date = date.replace(month=int(mm))
-    if dd and int(dd):
-        date = date.replace(day=int(dd))
+    if yy: date = date.replace(year=int(yy))
+    if mm: date = date.replace(month=int(mm))
+    if dd: date = date.replace(day=int(dd))
 
     err = 0
     while True:
