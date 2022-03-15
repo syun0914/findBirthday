@@ -17,7 +17,7 @@ def encrypt(s):
     ))).encrypt(message=s.encode('utf-8')[:245])).decode('utf-8')
 
 
-def OrgCode(sName: str, level: int=3):
+def OrgCode(sName, level=3):
     params = {
         'lctnScCode': '13',
         'schulCrseScCode': str(level),
@@ -40,20 +40,21 @@ def findUser(birth, eName, orgCode):
 
 def find(
         name, yy=None, mm=None, dd=None,
-        sName='서일중학교', level=3, tMode=False,
+        sName='서일중학교', level=3, ey=False,
         ):
     date = dt.date(1960, 1, 1)
     orgCode = OrgCode(sName, int(level))
     eName = encrypt(name)
+    iy, im, i_d = 0, 0, 0
 
-    if yy: date = date.replace(year=int(yy))
-    if mm: date = date.replace(month=int(mm))
-    if dd: date = date.replace(day=int(dd))
+    if yy and int(yy): iy, date = 1, date.replace(year=int(yy))
+    if mm and int(mm): im, date = 1, date.replace(month=int(mm))
+    if dd and int(dd): i_d, date = 1, date.replace(day=int(dd))
 
     err = 0
     while True:
         dateStr = dt.date.strftime(date, '%y%m%d')
-        print(f'\r찾는 중... {dateStr}(오류 {err}회 발생)', end='')
+        print(f'\r{name} 님의 생년월일을 찾는 중... {dateStr}(오류 {err}회 발생)', end='')
         try:
             if not findUser(dateStr, eName, orgCode).get('isError'):
                 print(dt.date.strftime(date, f'\r{name} 님의 주민등록 상 생년월일(YYMMDD)은 %y%m%d입니다.(오류 {err}회 발생)'))
@@ -64,7 +65,12 @@ def find(
         except:
             err += 1
             continue
-        if tMode and date.year>=2000:
-            print(f'\n{date.year}>=2000로 탐색을 중지하였습니다.')
+        if ey and date.year>=int(ey):
+            print(f'\n{date.year}>={ey}로 탐색을 중지하였습니다.')
             break
-        date += redelta(years=1) if (not yy) and mm and dd else (redelta(months=1) if (not yy and dd) and dd else redelta(days=1))
+        date += redelta(years=1) if im and i_d else redelta(days=1)
+
+
+def unFind(nameList, *args, **kwargs):
+    for s in nameList:
+        find(s, *args, **kwargs)
