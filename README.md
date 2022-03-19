@@ -8,7 +8,6 @@
  - **이 프로그램을 사용함으로써 발생하는 책임은 전적으로 프로그램을 실행하는 사용자에게 있습니다.**
  <details markdown="1">
  <summary>학교급 펼치기 · 접기</summary>
- 
   - 1: 유치원
   - 2: 초등학교
   - 3: 중학교
@@ -16,11 +15,39 @@
   - 5: 특수학교
  </details>
 
-## 사용법
-선생님 모드는 찾는 사람이 2000년보다 전에 태어났다는 가정 하에 찾는 연도가 2000년이 넘어가면 자동으로 탐색을 중단하는 모드입니다. 
-```python
-from findBirthday import find
-find('이름', 생년, 생월, 생일, 학교 이름, 학교급, 선생님 모드)
-# 예시 1: find('홍길동', 1234, 1, 0, '서일중학교', 3, True)
-# 예시 2: find('홍길순', 0, 2, 29, '서일여자고등학교', 4, False)
-```
+## findBirthday 사용법
+ `yy, mm, dd`을 모를 경우 `0`이나 `False` 또는 `None` 등으로 놓으면 기본으로 `1960, 1, 1`로 들어갑니다.
+
+ - find(기본형)
+    ```python
+    findBirthday.find(name, yy=None, mm=None, dd=None, sName='서일중학교', level=3, ey=False)
+    ```
+    | 인자  | 내용(타입) | 예시 |
+    | ----- | ---------- | ---- |
+    | `name` | 찾을 이름(str) | `'홍길동'` |
+    | `yy` | 생년(int 또는 str) | `1960` 또는 `'1960'` |
+    | `mm` | 생월(int 또는 str) | `1` 또는 `'1'` |
+    | `dd` | 생일(int 또는 str) | `1` 또는 `'1'` |
+    | `sName` | 학교 이름(str) | `'서일중학교'` |
+    | `level` | 학교급(int 또는 str) | `1` 또는 `'1'` |
+    | `ey` | 검색 중단 연도(int 또는 str) | `2000` 또는 `'2000'` |
+
+ - multiFind(다중형)
+    ```python
+    findBirthday.multiFind(nameList, *args, **kwargs)
+    ```
+    | 인자 | 내용(타입) | 예시 |
+    | ---- | ---------- | ---- |
+    | `nameList` | 찾을 이름 목록(list 또는 tuple) | `['홍길동', '홍길순']` 또는 `['홍길동', '홍길순']` |
+    | `*args` | `findBirthday.find`에 들어갈 인자 |  |
+    | `**kwargs` | `findBirthday.find`에 들어갈 인자 |  |
+
+## support 사용법
+ - 기본형
+    - `support` `findBirthday.find 인자`
+ - 다중형
+    - `support` `multi` `findBirthday.multifind 인자`
+ - 주의사항
+    - 띄어쓰기가 포함될 경우 큰따옴표(")로 감싸야 합니다.
+    - 파이썬 파일이지만 명령 프롬프트 등에서 직접 실행해야 합니다.
+    - 다중형을 쓸 경우 nameList 인자에 `"['홍길동', '홍길순']"`의 형태로 입력해야 합니다. 

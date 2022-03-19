@@ -38,10 +38,7 @@ def findUser(birth, eName, orgCode):
     return requests.post(url='https://cne'+BASEURL+'/v2/findUser', json=jData).json()
 
 
-def find(
-        name, yy=None, mm=None, dd=None,
-        sName='서일중학교', level=3, ey=False,
-        ):
+def find(name, yy=None, mm=None, dd=None, sName='서일중학교', level=3, ey=False):
     date = dt.date(1960, 1, 1)
     orgCode = OrgCode(sName, int(level))
     eName = encrypt(name)
@@ -71,6 +68,6 @@ def find(
         date += redelta(years=1) if im and i_d else redelta(days=1)
 
 
-def unFind(nameList, *args, **kwargs):
+def multiFind(nameList, *args, **kwargs):
     for s in nameList:
         find(s, *args, **kwargs)

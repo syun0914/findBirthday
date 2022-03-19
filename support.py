@@ -1,10 +1,10 @@
 from sys import argv
-from findBirthday import unFind, find
+from findBirthday import find, multiFind as mf
 
-if argv[1] == 'un':
+if argv[1] == 'multi':
     try:
-        unFind(eval(argv[2]), *argv[3:-2], int(argv[-1]))
+        mf(eval(argv[2]), *argv[3:-2], int(argv[-1]))
     except:
-        unFind(eval(argv[2]), *argv[3:])
+        mf(eval(argv[2]), *argv[3:])
 else:
     find(*argv[1:])
