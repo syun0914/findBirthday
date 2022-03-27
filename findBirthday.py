@@ -1,12 +1,13 @@
 import requests
 import datetime as dt
+from typing import Any, Final
 from base64 import b64decode, b64encode
 from dataclasses import dataclass as dc
 from Cryptodome.Cipher.PKCS1_v1_5 import new
 from Cryptodome.PublicKey.RSA import importKey
 from dateutil.relativedelta import relativedelta as red
 
-BASEURL = 'hcs.eduro.go.kr/v2'
+BASEURL: Final = 'hcs.eduro.go.kr/v2'
 
 @dc
 class School:
@@ -14,14 +15,14 @@ class School:
     orgCode: str
 
 
-def safeType(c, t):
+def safeType(c: Any, t: type):
     try:
         return t(c)
     except:
         return False
 
 
-def encrypt(s: str):
+def encrypt(s: str) -> str:
     return b64encode(new(importKey(b64decode(
         'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA81dCnCKt0NVH7j5Oh2+SGgEU'
         '0aqi5u6sYXemouJWXOlZO3jqDsHYM1qfEjVvCOmeoMNFXYSXdNhflU7mjWP8jWUmkYIQ'
@@ -32,10 +33,10 @@ def encrypt(s: str):
     ))).encrypt(message=s.encode('utf-8')[:245])).decode('utf-8')
 
 
-def school(sName: str, level=3, sido='13'):
+def school(sName, level=3, sido='13') -> School:
     params = {
         'lctnScCode': sido,
-        'schulCrseScCode': str(level),
+        'schulCrseScCode': level,
         'orgName': sName,
         'loginType': 'school'
     }
@@ -45,7 +46,7 @@ def school(sName: str, level=3, sido='13'):
     return School(d['key'], d['schulList'][0]['orgCode'])
 
 
-def findUser(birth: str, eName, sInfo: School, sidoURL='cne'):
+def findUser(birth, eName, sInfo: School, sidoURL='cne') -> bool:
     jData = {
         'searchKey': sInfo.key,
         'orgCode': sInfo.orgCode,
@@ -54,11 +55,11 @@ def findUser(birth: str, eName, sInfo: School, sidoURL='cne'):
         'stdntPNo': None,
         'loginType': 'school'
     }
-    return requests.post(
+    return bool(requests.post(
         url=f'https://{sidoURL}{BASEURL}/findUser',
         json=jData,
         headers={'Content-Type': 'application/json;charset=utf-8'}
-    ).json().get('isError')
+    ).json().get('isError'))
 
 
 def find(name, yy=None, mm=None, dd=None, sName='서일중학교', level=3, ey=False):
