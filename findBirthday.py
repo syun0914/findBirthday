@@ -68,24 +68,21 @@ def find(name, yy=None, mm=None, dd=None, sName='서일중학교', level=3, ey=F
     eName = encrypt(name)
     iy, im, i_d = safeType(yy, int), safeType(mm, int), safeType(dd, int)
     date = dt.date(iy or 1960, im or 1, i_d or 1)
-    err = 0
     
     while not ey or date.year<int(ey):
         dateStr = dt.date.strftime(date, '%y%m%d')
         print(f'\r{name} 님의 생년월일을 찾는 중... {dateStr}', end='')
         try:
             if not findUser(dateStr, eName, sInfo):
-                pm = f'\r{name} 님의 주민등록 상 생년월일(YYMMDD)은 %y%m%d입니다.'
-                print(dt.date.strftime(date, pm))
+                print('\r{name} 님의 주민등록 상 생년월일(YYMMDD)은 {dateStr}입니다.')
                 break
         except KeyboardInterrupt:
             print(f'\nCTRL-C가 눌려 중단합니다.')
             break
         except:
-            err += 1
             continue
         if ey and date.year>=int(ey):
-            print(f'\n{date.year}>={ey}로 탐색을 중지하였습니다.')
+            print(f'\n찾고 있는 날짜가 검색 중단 연도가 되어 탐색을 중지하였습니다.')
             break
         date += red(years=1) if not iy and im and i_d else red(days=1)
 
