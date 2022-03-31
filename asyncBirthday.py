@@ -1,4 +1,5 @@
 import requests
+import aiohttp
 import datetime as dt
 from typing import Any, Final
 from base64 import b64decode, b64encode
@@ -44,20 +45,21 @@ def school(sName, level=3, sido='13') -> School:
     return School(d['key'], d['schulList'][0]['orgCode'])
 
 
-def findUser(birth, eName, sInfo: School, sidoURL='cne') -> bool:
-    jData = {
+async def findUser(birth, eName, sInfo: School, sidoURL='cne') -> bool:
+    params = {
         'searchKey': sInfo.key,
         'orgCode': sInfo.orgCode,
         'name': eName,
         'birthday': encrypt(birth),
-        'stdntPNo': None,
         'loginType': 'school'
     }
-    return bool(requests.post(
-        url=f'https://{sidoURL}{URL}/findUser',
-        json=jData,
-        headers={'Content-Type': 'application/json;charset=utf-8'}
-    ).json().get('isError'))
+    async with aiohttp.ClientSession() as sess:
+        async with sess.get(
+            url=f'https://{sidoURL}{URL}/findUser',
+            params=params,
+            headers={'Content-Type': 'application/json;charset=utf-8'}
+        ) as res:
+            return (await res.text())
 
 
 def find(name, yy=None, mm=None, dd=None, sName='서일중학교', level=3, ey=False):
