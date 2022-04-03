@@ -72,7 +72,7 @@ def find(name, yy=None, mm=None, dd=None, sName='서일중학교', level=3, ey=F
         print(f'\r{name} 님의 생년월일을 찾는 중... {dateStr}', end='')
         try:
             if not findUser(dateStr, eName, sInfo):
-                print('\r{name} 님의 주민등록 상 생년월일(YYMMDD)은 {dateStr}입니다.')
+                print(f'\r{name} 님의 주민등록 상 생년월일(YYMMDD)은 {dateStr}입니다.')
                 break
         except KeyboardInterrupt:
             print(f'\nCTRL-C가 눌려 중단합니다.')
