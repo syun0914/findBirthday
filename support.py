@@ -1,13 +1,19 @@
 from sys import argv
-from asyncio import run, set_event_loop_policy as setPolicy, WindowsSelectorEventLoopPolicy as EventLoopPolicy
-from findBirthday import find as of, multiFind as omf
+from platform import system
 from asyncBirthday import find as f, multiFind as mf
+from findBirthday import find as of, multiFind as omf
+from asyncio import run
 
-setPolicy(EventLoopPolicy())
+if system() == 'Windows':
+    from asyncio import (
+        set_event_loop_policy as setPolicy,
+        WindowsSelectorEventLoopPolicy as EventLoopPolicy
+    )
+    setPolicy(EventLoopPolicy())
 
 if __name__ == '__main__':
     if argv[1] == 'old': # findBirthday.find
-        omf(*argv[2:])
+        of(*argv[2:])
     if argv[1] == 'omulti': # findBirthday.multiFind
         try:
             omf(eval(argv[2]), *argv[3:-2], int(argv[-1]))

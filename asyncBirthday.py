@@ -1,14 +1,19 @@
 import aiohttp
 import datetime as dt
+from platform import system
 from typing import Any, Final
 from base64 import b64decode, b64encode
 from dataclasses import dataclass as dc
 from Cryptodome.Cipher.PKCS1_v1_5 import new
 from Cryptodome.PublicKey.RSA import importKey
 from dateutil.relativedelta import relativedelta as red
-from asyncio import set_event_loop_policy as setPolicy, WindowsSelectorEventLoopPolicy as EventLoopPolicy
 
-setPolicy(EventLoopPolicy())
+if system() == 'Windows':
+    from asyncio import (
+        set_event_loop_policy as setPolicy,
+        WindowsSelectorEventLoopPolicy as EventLoopPolicy
+    )
+    setPolicy(EventLoopPolicy())
 
 URL: Final = 'hcs.eduro.go.kr/v2'
 
