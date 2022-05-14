@@ -1,4 +1,10 @@
 # findBirthday
+```
+상태: 개발 중단
+이유:
+  findUser가 v3으로 업데이트됨
+  asyncBirthday의 오류가 너무 심함
+```
 자가진단으로 생일 찾기
 
 ## 유의 사항
